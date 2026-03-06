@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Threads – Corporate Gifting</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f2ec;
+    --cream: #e8e2d9;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --grey: #2a2a2a;
+    --mid: #555;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: normal;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: rgba(245,242,236,0.65);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--black) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 2px;
+    font-weight: 500 !important;
+    color: var(--black);
+    transition: background 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--black) !important; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 6rem 2rem 4rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 60%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 20% 20%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+  .hero-noise {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+  .hero-line {
+    position: absolute;
+    width: 1px; height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    left: 50%; top: 0;
+    animation: lineDown 2s ease-out forwards;
+  }
+  @keyframes lineDown {
+    from { transform: scaleY(0); transform-origin: top; opacity: 0; }
+    to { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 900px; }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.8rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4.5rem, 12vw, 10rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    font-size: 0.7em;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(245,242,236,0.55);
+    max-width: 480px;
+    margin: 1.8rem auto 2.8rem;
+    line-height: 1.7;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: var(--gold);
+    color: var(--black);
+    padding: 0.9rem 2rem;
+    border-radius: 2px;
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    border-radius: 2px;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: border-color 0.3s, transform 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    color: rgba(245,242,236,0.3);
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    animation: bounce 2s infinite;
+  }
+  .hero-scroll::after {
+    content: '';
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    display: block;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TICKER */
+  .ticker {
+    background: var(--gold);
+    color: var(--black);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 18s linear infinite;
+  }
+  .ticker-item {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0 3rem;
+  }
+  .ticker-sep { opacity: 0.4; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTIONS SHARED */
+  section { padding: 7rem 3rem; }
+  .section-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+  .section-body {
+    color: rgba(245,242,236,0.55);
+    line-height: 1.8;
+    max-width: 520px;
+  }
+  .divider {
+    width: 48px; height: 2px;
+    background: var(--gold);
+    margin: 1.5rem 0;
+  }
+
+  /* ABOUT */
+  .about {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-card {
+    background: var(--grey);
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 3rem;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(to right, var(--gold), transparent);
+  }
+  .about-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;
+  }
+  .stat { border-left: 2px solid var(--gold); padding-left: 1rem; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: rgba(245,242,236,0.45);
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+  .location-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 2px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  /* PRODUCTS */
+  .products-section { background: var(--grey); }
+  .products-section .inner { max-width: 1200px; margin: 0 auto; }
+  .products-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1.5rem;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.1);
+  }
+  .product-card {
+    background: #1a1a1a;
+    padding: 0 2.5rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .product-card:hover { background: #222; }
+  .product-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .product-card:hover::after { transform: scaleX(1); }
+  .product-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    filter: grayscale(20%) brightness(0.85);
+    transition: filter 0.4s, transform 0.4s;
+  }
+  .product-card:hover .product-img {
+    filter: grayscale(0%) brightness(1);
+    transform: scale(1.03);
+  }
+  .product-img-wrap {
+    overflow: hidden;
+    margin: 0 -2.5rem 1.5rem -2.5rem;
+    position: relative;
+  }
+  .product-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, #1a1a1a);
+    pointer-events: none;
+  }
+  .product-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.7rem;
+  }
+  .product-desc {
+    font-size: 0.82rem;
+    color: rgba(245,242,236,0.45);
+    line-height: 1.7;
+    margin-bottom: 1.2rem;
+  }
+  .product-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 0.2rem 0.6rem;
+    border-radius: 1px;
+    margin-right: 0.4rem; margin-top: 0.3rem;
+  }
+
+  /* HAMPERS FEATURE */
+  .hampers {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: center;
+  }
+  .hampers-visual {
+    background: linear-gradient(135deg, #1a1a1a, #222);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 4px;
+    padding: 3rem;
+    position: relative;
+  }
+  .hampers-visual::before {
+    content: '★';
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    color: var(--gold); font-size: 1rem;
+  }
+  .hamper-item {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(245,242,236,0.06);
+  }
+  .hamper-item:last-child { border-bottom: none; }
+  .hamper-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+  }
+  .hamper-name { font-size: 0.9rem; }
+  .hamper-price {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+
+  /* CLIENTS */
+  .clients-section { background: #111; text-align: center; }
+  .clients-inner { max-width: 900px; margin: 0 auto; }
+  .clients-grid {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 1px;
+    margin-top: 3rem;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.08);
+  }
+  .client-cell {
+    background: var(--black);
+    flex: 1 1 180px;
+    padding: 2.2rem 2rem;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.5rem;
+    transition: background 0.3s;
+  }
+  .client-cell:hover { background: #111; }
+  .client-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    color: rgba(245,242,236,0.7);
+    transition: color 0.3s;
+  }
+  .client-cell:hover .client-name { color: var(--gold); }
+  .client-type {
+    font-size: 0.65rem;
+    color: rgba(245,242,236,0.25);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* PROCESS */
+  .process-section { background: var(--grey); }
+  .process-inner { max-width: 1100px; margin: 0 auto; }
+  .process-steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 0; margin-top: 3.5rem;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute; top: 2rem; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+  .step { padding: 0 1.5rem; text-align: center; }
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: rgba(201,168,76,0.15);
+    line-height: 1;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .step-num::after {
+    content: attr(data-num);
+    position: absolute; inset: 0;
+    color: var(--gold);
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .step-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+  .step-desc {
+    font-size: 0.78rem;
+    color: rgba(245,242,236,0.4);
+    line-height: 1.6;
+  }
+
+  /* CTA STRIP */
+  .cta-strip {
+    background: linear-gradient(135deg, var(--gold) 0%, #b8923a 100%);
+    padding: 5rem 3rem;
+    text-align: center;
+  }
+  .cta-strip h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    color: var(--black);
+    letter-spacing: 0.04em;
+    margin-bottom: 1rem;
+  }
+  .cta-strip p {
+    color: rgba(10,10,10,0.65);
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+  }
+  .btn-dark {
+    display: inline-flex; align-items: center; gap: 0.7rem;
+    background: var(--black);
+    color: var(--gold);
+    padding: 1rem 2.5rem;
+    border-radius: 2px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-dark:hover { background: #1a1a1a; transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    padding: 4rem 3rem 2rem;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+  .footer-grid {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem;
+    margin-bottom: 3rem;
+  }
+  .footer-brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 0.08em;
+    margin-bottom: 0.8rem;
+  }
+  .footer-brand-name span { color: var(--gold); }
+  .footer-tagline {
+    font-size: 0.82rem;
+    color: rgba(245,242,236,0.4);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  .footer-contact a {
+    display: flex; align-items: center; gap: 0.6rem;
+    color: rgba(245,242,236,0.55);
+    text-decoration: none; font-size: 0.82rem;
+    margin-bottom: 0.6rem;
+    transition: color 0.3s;
+  }
+  .footer-contact a:hover { color: var(--gold); }
+  .footer-col h4 {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: 0.6rem; }
+  .footer-col ul li a {
+    color: rgba(245,242,236,0.4); text-decoration: none;
+    font-size: 0.82rem; transition: color 0.3s;
+  }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    border-top: 1px solid rgba(245,242,236,0.06);
+    padding-top: 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.72rem; color: rgba(245,242,236,0.2);
+  }
+  .wa-float {
+    position: fixed; bottom: 2rem; right: 2rem;
+    width: 58px; height: 58px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+    z-index: 200;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: pulseWa 3s infinite;
+  }
+  .wa-float:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
+  @keyframes pulseWa {
+    0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.35); }
+    50% { box-shadow: 0 4px 30px rgba(37,211,102,0.6), 0 0 0 8px rgba(37,211,102,0.1); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 1.5rem; }
+    .about, .hampers { grid-template-columns: 1fr; gap: 3rem; }
+    .products-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    .process-steps::before { display: none; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">black<span>threads</span>.</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#hampers">Hampers</a></li>
+    <li><a href="#clients">Clients</a></li>
+    <li><a href="https://wa.me/919048099955?text=Hello%2C%20I%27m%20interested%20in%20corporate%20gifting%20solutions." target="_blank" class="nav-cta">Get Quote</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Corporate Gifting · Trivandrum</p>
+    <h1 class="hero-title">
+      Gifts That<br><em>Command</em><br>Attention.
+    </h1>
+    <p class="hero-sub">Premium corporate gifting and customised hampers. From Trivandrum to every boardroom — crafted in Tiruppur, delivered with intent.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/919048099955?text=Hello%2C%20I%20want%20to%20explore%20your%20corporate%20gifting%20solutions." target="_blank" class="btn-primary">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        WhatsApp Us
+      </a>
+      <a href="#products" class="btn-outline">View Products ↓</a>
+    </div>
+  </div>
+  <div class="hero-scroll">scroll</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Corporate Gifting</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Custom Hampers</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Premium Apparel</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Brand Merchandise</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Tiruppur Manufacturing</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Trivandrum HQ</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Corporate Gifting</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Custom Hampers</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Premium Apparel</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Brand Merchandise</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Tiruppur Manufacturing</span><span class="ticker-item ticker-sep">✦</span>
+    <span class="ticker-item">Trivandrum HQ</span><span class="ticker-item ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about">
+    <div>
+      <p class="section-label">Who We Are</p>
+      <h2 class="section-title">Gifting with precision. Manufactured with pride.</h2>
+      <div class="divider"></div>
+      <p class="section-body">Black Threads is a premier corporate gifting company headquartered in Trivandrum. We conceptualise, customise, and deliver premium gifts and branded merchandise that leave lasting impressions on your clients, partners, and team.</p>
+      <p class="section-body" style="margin-top: 1rem;">Our manufacturing unit in Tiruppur ensures the highest textile quality — direct from India's garment capital to your brand's hands.</p>
+      <div style="margin-top: 1.8rem;">
+        <span class="location-badge">📍 Sales Office — Trivandrum</span>
+        <span class="location-badge">🏭 Manufacturing — Tiruppur</span>
+      </div>
+    </div>
+    <div class="about-visual">
+      <div class="about-card">
+        <p class="section-label" style="margin-bottom:0.5rem;">By the numbers</p>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">Corporate Clients</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">500+</div>
+            <div class="stat-label">Gift SKUs</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">100%</div>
+            <div class="stat-label">Custom Options</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">Pan</div>
+            <div class="stat-label">India Delivery</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="inner">
+    <div class="products-head">
+      <div>
+        <p class="section-label">What We Offer</p>
+        <h2 class="section-title">Our Product Range</h2>
+      </div>
+      <a href="https://wa.me/919048099955?text=Hi%2C%20I%20want%20to%20know%20more%20about%20your%20products." target="_blank" class="btn-outline" style="align-self:flex-end;">Ask for Catalogue →</a>
+    </div>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=600&q=80" alt="Corporate Apparel" />
+        </div>
+        <div class="product-name">Corporate Apparel</div>
+        <div class="product-desc">Branded T-shirts, polo shirts, formal shirts, and uniforms — custom embroidered or printed with your company logo. Direct from our Tiruppur unit.</div>
+        <span class="product-tag">Customisable</span>
+        <span class="product-tag">Bulk Orders</span>
+      </div>
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=600&q=80" alt="Gift Hampers" />
+        </div>
+        <div class="product-name">Gift Hampers</div>
+        <div class="product-desc">Curated hampers for festivals, onboarding, and appreciation. Premium boxes assembled with care, branded to your identity.</div>
+        <span class="product-tag">Festive</span>
+        <span class="product-tag">Onboarding</span>
+      </div>
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&q=80" alt="Branded Bags" />
+        </div>
+        <div class="product-name">Branded Bags & Accessories</div>
+        <div class="product-desc">Laptop bags, tote bags, backpacks, and travel accessories printed with your brand. Durable, stylish, corporate-ready.</div>
+        <span class="product-tag">Travel</span>
+        <span class="product-tag">Daily Use</span>
+      </div>
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=600&q=80" alt="Stationery" />
+        </div>
+        <div class="product-name">Stationery & Desk Items</div>
+        <div class="product-desc">Notepads, pens, planners, mouse pads, and desk organisers — all branded for a cohesive corporate identity.</div>
+        <span class="product-tag">Office Essentials</span>
+      </div>
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&q=80" alt="Drinkware" />
+        </div>
+        <div class="product-name">Drinkware & Kitchenware</div>
+        <div class="product-desc">Premium mugs, insulated bottles, flasks, and tea sets — everyday gifts employees and clients will actually use and love.</div>
+        <span class="product-tag">Premium</span>
+        <span class="product-tag">Gifting Favourite</span>
+      </div>
+      <div class="product-card">
+        <div class="product-img-wrap">
+          <img class="product-img" src="https://images.unsplash.com/photo-1574944985070-8f3ebc6b79d2?w=600&q=80" alt="Tech Gifts" />
+        </div>
+        <div class="product-name">Tech & Gadget Gifts</div>
+        <div class="product-desc">Wireless chargers, USB hubs, earphones, and power banks — branded, packaged, and ready to impress your tech-savvy recipients.</div>
+        <span class="product-tag">High Perceived Value</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HAMPERS -->
+<section id="hampers">
+  <div class="hampers">
+    <div class="hampers-visual">
+      <p class="section-label" style="margin-bottom:1.5rem;">Hamper Builder</p>
+      <div class="hamper-item">
+        <div class="hamper-dot"></div>
+        <span class="hamper-name">Premium Branded Apparel (1 pc)</span>
+        <span class="hamper-price">✓ Included</span>
+      </div>
+      <div class="hamper-item">
+        <div class="hamper-dot"></div>
+        <span class="hamper-name">Insulated Flask / Mug</span>
+        <span class="hamper-price">✓ Included</span>
+      </div>
+      <div class="hamper-item">
+        <div class="hamper-dot"></div>
+        <span class="hamper-name">Branded Notebook + Pen Set</span>
+        <span class="hamper-price">✓ Included</span>
+      </div>
+      <div class="hamper-item">
+        <div class="hamper-dot"></div>
+        <span class="hamper-name">Customised Gift Box & Ribbon</span>
+        <span class="hamper-price">✓ Included</span>
+      </div>
+      <div class="hamper-item">
+        <div class="hamper-dot"></div>
+        <span class="hamper-name">Handwritten / Printed Message Card</span>
+        <span class="hamper-price">✓ Included</span>
+      </div>
+      <div class="hamper-item">
+        <div class="hamper-dot"></div>
+        <span class="hamper-name">Add-on Items of Your Choice</span>
+        <span class="hamper-price">Flexible</span>
+      </div>
+      <a href="https://wa.me/919048099955?text=Hi%2C%20I%27d%20like%20to%20customise%20a%20hamper%20for%20my%20company." target="_blank" class="btn-primary" style="margin-top:1.8rem; width:fit-content;">
+        Build My Hamper →
+      </a>
+    </div>
+    <div>
+      <p class="section-label">Signature Offering</p>
+      <h2 class="section-title">Customised Hampers, Your Way.</h2>
+      <div class="divider"></div>
+      <p class="section-body">Every company is different. Every occasion is unique. That's why we build hampers from scratch — tailored to your brand, your budget, and your recipients.</p>
+      <p class="section-body" style="margin-top: 1rem;">From 10 pieces to 10,000 — whether it's a festive Diwali box, an employee welcome kit, or a client appreciation package, we handle design, packing, and delivery.</p>
+      <ul style="margin-top: 1.5rem; padding-left: 0; list-style:none;">
+        <li style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.7rem; font-size:0.85rem; color:rgba(245,242,236,0.6);">
+          <span style="color:var(--gold);">✦</span> Full branding & logo customisation
+        </li>
+        <li style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.7rem; font-size:0.85rem; color:rgba(245,242,236,0.6);">
+          <span style="color:var(--gold);">✦</span> Festive, onboarding & milestone hampers
+        </li>
+        <li style="display:flex; align-items:center; gap:0.7rem; margin-bottom:0.7rem; font-size:0.85rem; color:rgba(245,242,236,0.6);">
+          <span style="color:var(--gold);">✦</span> Pan-India doorstep delivery
+        </li>
+        <li style="display:flex; align-items:center; gap:0.7rem; font-size:0.85rem; color:rgba(245,242,236,0.6);">
+          <span style="color:var(--gold);">✦</span> Minimum order flexibility
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="process-inner">
+    <div style="text-align:center; margin-bottom:1rem;">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">Four Steps to the Perfect Gift</h2>
+    </div>
+    <div class="process-steps">
+      <div class="step">
+        <div class="step-num" data-num="01">01</div>
+        <div class="step-title">Consult</div>
+        <div class="step-desc">Reach us via WhatsApp. We understand your brand, occasion, and budget.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" data-num="02">02</div>
+        <div class="step-title">Design</div>
+        <div class="step-desc">Our team creates a curated proposal with mockups and options.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" data-num="03">03</div>
+        <div class="step-title">Manufacture</div>
+        <div class="step-desc">Products are crafted at our Tiruppur facility with quality checks.</div>
+      </div>
+      <div class="step">
+        <div class="step-num" data-num="04">04</div>
+        <div class="step-title">Deliver</div>
+        <div class="step-desc">Packed, branded, and shipped to your address or directly to recipients.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients-section" id="clients">
+  <div class="clients-inner">
+    <p class="section-label">Trusted By</p>
+    <h2 class="section-title">Brands That Chose Black Threads</h2>
+    <p style="color:rgba(245,242,236,0.4); margin-top:0.5rem; font-size:0.85rem;">Industry leaders trust us to represent their brand.</p>
+    <div class="clients-grid">
+      <div class="client-cell">
+        <div class="client-name">MRF</div>
+        <div class="client-type">Manufacturing</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">UST Global</div>
+        <div class="client-type">Technology</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">Speridian</div>
+        <div class="client-type">IT Services</div>
+      </div>
+      <div class="client-cell">
+        <div class="client-name">+ More</div>
+        <div class="client-type">Join the list</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <h2>Ready to Gift Better?</h2>
+  <p>Let's build something memorable for your team and clients.</p>
+  <a href="https://wa.me/919048099955?text=Hello%20Black%20Threads%21%20I%27d%20like%20to%20enquire%20about%20corporate%20gifting%20solutions%20for%20my%20company." target="_blank" class="btn-dark">
+    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Chat on WhatsApp — +91 90480 99955
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">black<span>threads</span>.</div>
+      <p class="footer-tagline">Premium corporate gifting and branded merchandise. Rooted in Trivandrum, manufactured in Tiruppur, trusted across India.</p>
+      <div class="footer-contact">
+        <a href="https://wa.me/919048099955" target="_blank">
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          +91 90480 99955
+        </a>
+        <a href="#">📍 Trivandrum, Kerala (Sales Office)</a>
+        <a href="#">🏭 Tiruppur, Tamil Nadu (Manufacturing)</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Products</h4>
+      <ul>
+        <li><a href="#products">Corporate Apparel</a></li>
+        <li><a href="#hampers">Gift Hampers</a></li>
+        <li><a href="#products">Bags & Accessories</a></li>
+        <li><a href="#products">Stationery</a></li>
+        <li><a href="#products">Drinkware</a></li>
+        <li><a href="#products">Tech Gifts</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#clients">Our Clients</a></li>
+        <li><a href="#hampers">Custom Hampers</a></li>
+        <li><a href="https://wa.me/919048099955" target="_blank">Contact Us</a></li>
+        <li><a href="https://wa.me/919048099955?text=Send%20me%20your%20catalogue" target="_blank">Request Catalogue</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Black Threads. All rights reserved.</span>
+    <span>Corporate Gifting · Trivandrum · Kerala</span>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/919048099955?text=Hello%20Black%20Threads%21%20I%27m%20interested%20in%20corporate%20gifting." target="_blank" class="wa-float" title="Chat on WhatsApp">
+  <svg width="28" height="28" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+  function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); }
+  animRing();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; ring.style.width = '52px'; ring.style.height = '52px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width = '12px'; cursor.style.height = '12px'; ring.style.width = '36px'; ring.style.height = '36px'; });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.product-card, .step, .client-cell, .hamper-item, .stat');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transition = `opacity 0.5s ${(i % 4) * 0.08}s, transform 0.5s ${(i % 4) * 0.08}s`;
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(20px)'; observer.observe(el); });
+
+  // Active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+    navLinks.forEach(a => { a.style.color = a.getAttribute('href') === '#' + current ? 'var(--gold)' : ''; });
+  });
+</script>
+</body>
+</html>
